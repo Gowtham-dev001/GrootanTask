@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+ body {
+    background-color : #659DBD;
+    margin: 0;
+    padding: 0;
+	font-size:20px;
+    
+  background-size: cover;
+
+}
+h1 {
+    color : #000000;
+    text-align : center;
+    font-family: "SIMPSON";
+}
+form {
+ background-color : white;
+    width: 500px;
+    margin: 0 auto;
+	opacity:0.8;
+}
+form {
+    border: 3px solid #f1f1f1;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+
+}
+
+img.avatar {
+    width: 70%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+
+
+table {
+background-color : white;
+  border-collapse: collapse;
+   table-layout: fixed;
+  width: 500px;  
+  opacity:0.8;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+}
+
+
+</style>
+<body>
+<div style="position:absolute; right:1px; bottom:35px;"> 
+      <div class="imgcontainer">
+	      <img src="login.jpg" alt="Avatar" class="avatar"/>
+	  </div>
+  </div>
+<script>
+const queryString = window.location.search;
+console.log(queryString);
+const urlParams = new URLSearchParams(queryString);
+const id = urlParams.get('id');
+console.log(id);
+
+var request = new XMLHttpRequest()
+
+request.open('GET', "https://userdetails.free.beeceptor.com/userdetails", true)
+request.send()
+request.onload = function () {
+  // Begin accessing JSON data here
+  var data = JSON.parse(this.response)
+  if (request.status >= 200 && request.status < 400) {   
+      console.log(data.Array)
+	  let table = document.querySelector("table");
+	  for(var i=0;i<data.Array.length;i++){
+	  if(i==id)	{
+	  	  createTable(data.Array, i);
+		  break;
+		}
+}
+}
+}
+function createRow(table,key,value){
+ let row = table.insertRow();
+ let cell = row.insertCell();
+ let text = document.createTextNode(key);
+ cell.appendChild(text);
+let row1 = table.insertRow();
+ let cell1 = row.insertCell();
+ let text1 = document.createTextNode(value);
+ cell1.appendChild(text1);
+}
+function createTable(obj, i){
+let table = document.querySelector("table");
+		  createRow(table,"User ID", i+1);
+          createRow(table,"Name", obj[i].name);
+		  createRow(table,"First Name", obj[i].firstName);
+		  createRow(table,"Last Name", obj[i].lastName);
+		  createRow(table,"Date of Birth", obj[i].dob);
+		  createRow(table,"Age", obj[i].age);
+		  createRow(table,"Address", obj[i].address);
+		  createRow(table,"City", obj[i].city);
+		  createRow(table,"State", obj[i].state);
+		  createRow(table,"Email", obj[i].email);
+		  createRow(table,"Phone", obj[i].phone);
+		  let row = table.insertRow();
+			if(i>0) {
+			var x = document.createElement("BUTTON");
+			var t = document.createTextNode("Previous");
+			x.appendChild(t);
+			let cell = row.insertCell();
+			cell.appendChild(x);
+			x.onclick = function() {
+			var Parent = document.querySelector("table");
+			while(Parent.hasChildNodes())
+			{
+			   Parent.removeChild(Parent.firstChild);
+			}
+            createTable(obj, i-1);	
+		  }
+		  }
+		  if(i<obj.length-1){
+		  console.log(i);
+		  console.log(obj.length);
+		  var x = document.createElement("BUTTON");
+			var t = document.createTextNode("Next");
+			x.appendChild(t);
+			let cell = row.insertCell();
+			cell.appendChild(x);
+			x.onclick = function() {
+			var Parent = document.querySelector("table");
+			while(Parent.hasChildNodes())
+			{
+			   Parent.removeChild(Parent.firstChild);
+			}
+            createTable(obj, i+1);			
+		  }
+		  }
+}
+</script>
+<div style="position:absolute;left:50px; top:50px;"> 
+<table>
+</table>
+</div>
+</body>
+</html>
